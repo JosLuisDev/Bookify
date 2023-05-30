@@ -13,7 +13,7 @@ public class Purchase {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @OneToMany
-    @JoinColumn(name = "id")//La tabla libros tendra la primary key de esta tabla
+    //@JoinColumn(name = "id", referencedColumnName = "Book.id")//La tabla libros tendra la primary key de esta tabla
     private List<Book> book;
     @OneToOne
     @JoinColumn(name = "id")
