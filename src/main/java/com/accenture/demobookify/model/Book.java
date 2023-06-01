@@ -3,6 +3,7 @@ package com.accenture.demobookify.model;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "book")
@@ -17,6 +18,8 @@ public class Book {
     private String description;
     private BigDecimal price;
     private int quantity_available;
+    //@OneToMany(mappedBy = "book")//Nombre del atributo del objeto
+    //private List<Purchase> purchases;
 
     public Long getId() {
         return id;

@@ -12,11 +12,11 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToMany
-    //@JoinColumn(name = "id", referencedColumnName = "Book.id")//La tabla libros tendra la primary key de esta tabla
-    private List<Book> book;
-    @OneToOne
-    @JoinColumn(name = "id")
+    @ManyToOne//Siempre lleva el joincolumn porque es el dueño de la foreign key
+    @JoinColumn(name = "book_id", nullable = false)//La tabla libros tendra la primary key de esta tabla
+    private Book book;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
     private LocalDate saledate;
     private BigDecimal totalprice;
@@ -29,11 +29,11 @@ public class Purchase {
         this.id = id;
     }
 
-    public List<Book> getBook() {
+    public Book getBook() {
         return book;
     }
 
-    public void setBook(List<Book> book) {
+    public void setBook(Book book) {
         this.book = book;
     }
 
