@@ -6,11 +6,13 @@ import jakarta.persistence.*;
 @Table(name = "author")
 public class Author {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secuencia")
+    @SequenceGenerator(name = "secuencia", sequenceName = "ecuencia", initialValue = 6, allocationSize = 1)
     private Long id;
     private String firstname;
     private String lastname;
     private String biography;
+    private boolean isActive;
 
     public Long getId() {
         return id;
@@ -38,5 +40,13 @@ public class Author {
 
     public void setBiography(String biography) {
         this.biography = biography;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

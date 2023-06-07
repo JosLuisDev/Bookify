@@ -1,8 +1,8 @@
-INSERT INTO author (id, firstname, lastname, biography) VALUES (1, 'John', 'Doe', 'Biografía de John Doe');
-INSERT INTO author (id, firstname, lastname, biography) VALUES (2, 'Jane', 'Smith', 'Biografía de Jane Smith');
-INSERT INTO author (id, firstname, lastname, biography) VALUES (3, 'Michael', 'Johnson', 'Biografía de Michael Johnson');
-INSERT INTO author (id, firstname, lastname, biography) VALUES (4, 'Emily', 'Williams', 'Biografía de Emily Williams');
-INSERT INTO author (id, firstname, lastname, biography) VALUES (5, 'David', 'Brown', 'Biografía de David Brown');
+INSERT INTO author (id, firstname, lastname, biography, is_active) VALUES (1, 'John', 'Doe', 'Biografía de John Doe',true);
+INSERT INTO author (id, firstname, lastname, biography, is_active) VALUES (2, 'Jane', 'Smith', 'Biografía de Jane Smith',true);
+INSERT INTO author (id, firstname, lastname, biography, is_active) VALUES (3, 'Michael', 'Johnson', 'Biografía de Michael Johnson',true);
+INSERT INTO author (id, firstname, lastname, biography, is_active) VALUES (4, 'Emily', 'Williams', 'Biografía de Emily Williams',true);
+INSERT INTO author (id, firstname, lastname, biography, is_active) VALUES (5, 'David', 'Brown', 'Biografía de David Brown',true);
 
 INSERT INTO book (id, title, author_id, description, price, quantity_available) VALUES (1, 'Libro 1', 1, 'Descripción del libro 1', 10.99, 100);
 INSERT INTO book (id, title, author_id, description, price, quantity_available) VALUES (2, 'Libro 2', 2, 'Descripción del libro 2', 15.99, 50);
@@ -16,8 +16,10 @@ INSERT INTO user_bookify (id, username, password) VALUES (3, 'usuario3', 'passwo
 INSERT INTO user_bookify (id, username, password) VALUES (4, 'usuario4', 'password4');
 INSERT INTO user_bookify (id, username, password) VALUES (5, 'usuario5', 'password5');
 
-INSERT INTO purchase (id,book_id, saledate, totalprice) VALUES (1,1,1, '2023-01-01', 100.00);
-INSERT INTO purchase (id,book_id, saledate, totalprice) VALUES (2,2,2, '2023-02-01', 150.00);
-INSERT INTO purchase (id,book_id, saledate, totalprice) VALUES (3,3,3, '2023-03-01', 200.00);
-INSERT INTO purchase (id,book_id, saledate, totalprice) VALUES (4,4,4, '2023-04-01', 120.00);
-INSERT INTO purchase (id,book_id, saledate, totalprice) VALUES (5,5,5, '2023-05-01', 180.00);
+INSERT INTO purchase (id, book_id, user_id, saledate, totalprice) VALUES (3,3,3, '2023-03-01', 200.00);
+INSERT INTO purchase (id, book_id, user_id, saledate, totalprice) VALUES (2,2,2, '2023-02-01', 150.00);
+INSERT INTO purchase (id, book_id, user_id, saledate, totalprice) VALUES (1,1,1, '2023-01-01', 100.00);
+INSERT INTO purchase (id, book_id, user_id, saledate, totalprice) VALUES (4,4,4, '2023-04-01', 120.00);
+INSERT INTO purchase (id, book_id, user_id, saledate, totalprice) VALUES (5,5,5, '2023-05-01', 180.00);
+
+CREATE SEQUENCE secuencia START WITH 100;
