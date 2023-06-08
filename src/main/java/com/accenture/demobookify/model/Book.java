@@ -12,7 +12,7 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)//NO AGARRA EK CASCADE ALL SIGUE SURGIENDO ERROR DE CONSTRAINT
     @JoinColumn(name = "author_id")//La tabla book tendra la primary key de la tabla author
     private Author author;
     private String description;
@@ -20,7 +20,7 @@ public class Book {
     private int quantity_available;
     //@OneToMany(mappedBy = "book")//Nombre del atributo del objeto
     //private List<Purchase> purchases;
-
+    private boolean isActive;
     public Long getId() {
         return id;
     }
@@ -67,5 +67,13 @@ public class Book {
 
     public void setQuantity_available(int quantity_available) {
         this.quantity_available = quantity_available;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

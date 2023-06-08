@@ -12,7 +12,7 @@ public class Purchase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne//Siempre lleva el joincolumn porque es el dueño de la foreign key
+    @ManyToOne(cascade = CascadeType.ALL)//Siempre lleva el joincolumn porque es el dueño de la foreign key
     @JoinColumn(name = "book_id", nullable = false)//La tabla libros tendra la primary key de esta tabla
     private Book book;
     @ManyToOne
@@ -20,13 +20,10 @@ public class Purchase {
     private User user;
     private LocalDate saledate;
     private BigDecimal totalprice;
+    private boolean isActive;
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Book getBook() {
@@ -59,5 +56,13 @@ public class Purchase {
 
     public void setTotalprice(BigDecimal totalprice) {
         this.totalprice = totalprice;
+    }
+
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
     }
 }

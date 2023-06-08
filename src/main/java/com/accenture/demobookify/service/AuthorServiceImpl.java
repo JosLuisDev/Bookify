@@ -2,6 +2,7 @@ package com.accenture.demobookify.service;
 
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.repository.AuthorRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
