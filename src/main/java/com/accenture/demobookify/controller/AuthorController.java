@@ -1,11 +1,12 @@
 package com.accenture.demobookify.controller;
 
+import com.accenture.demobookify.dto.DatosAuthor;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.Book;
-import com.accenture.demobookify.model.Purchase;
 import com.accenture.demobookify.service.AuthorService;
 import com.accenture.demobookify.service.BookService;
 import com.accenture.demobookify.service.PurchaseService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class AuthorController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Author> findById(@PathVariable Long id) {
-        Author author = authorService.getById(id).get();
+        Author author = authorService.getById(id);
         return ResponseEntity.status(HttpStatus.OK).body(author);
     }
 
@@ -38,20 +39,29 @@ public class AuthorController {
         List<Author> authors = authorService.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(authors);
     }
-
+    /*
+    Al crear un usuario no debemos mandar el ID, puesto que es autogenerado y el campo isActive debe de ser siempre true
+    cuando se crea un usuario. Para esto utilizamos el DTO DatosAuthor.
+     */
     @PostMapping("/")
-    ResponseEntity<String> save(@RequestBody Author author){
-        Long id = authorService.save(author);
+    @Transactional
+    ResponseEntity<String> save(@Valid @RequestBody DatosAuthor datosAuthor){
+        Long id = authorService.save(datosAuthor);
         return ResponseEntity.status(HttpStatus.OK).body("Se guardo con exito el autor con id: " + id);
     }
-
+/*
+Al actualizar el author, no se debe poder actualizar id para evitar errores inesperados dado que es autogenerado
+ni tampoco el campo active.
+ */
     @PutMapping("/{id}")
-    ResponseEntity<String> update (@PathVariable Long id, @RequestBody Author author){
+    @Transactional//No hay necesidad de llamar al Repository los cambios que realiza en el service sobre la instancia se persisten en BD
+    ResponseEntity<String> update (@PathVariable Long id, @Valid @RequestBody DatosAuthor author){
         Long idRes = authorService.update(id,author);
         return ResponseEntity.status(HttpStatus.OK).body("Se actualizo el registro con id: " + idRes);
     }
 
     @DeleteMapping("/{id}")
+    @Transactional
     ResponseEntity<String> delete(@PathVariable Long id){
         authorService.delete(id);
         return ResponseEntity.ok("Logic delete success");

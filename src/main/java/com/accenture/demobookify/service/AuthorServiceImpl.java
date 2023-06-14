@@ -1,5 +1,6 @@
 package com.accenture.demobookify.service;
 
+import com.accenture.demobookify.dto.DatosAuthor;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.repository.AuthorRepository;
 import jakarta.transaction.Transactional;
@@ -24,38 +25,30 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public Optional<Author> getById(Long id) {
-        return authorRepository.findById(id);
+    public Author getById(Long id) {
+        return authorRepository.getReferenceById(id);
     }
 
     @Override
-    public Long save(Author author) {
+    public Long save(DatosAuthor datosAuthor) {
+        Author author = new Author(datosAuthor);
         Author authorRes = authorRepository.save(author);
         return authorRes.getId();
     }
 
     @Override
-    public Long update(Long id, Author author) {
-        Optional<Author> authorOpt = getById(id);
-        if(authorOpt.isPresent()){
-            Author authorBD = authorOpt.get();
-            authorBD.setFirstname(author.getFirstname());
-            authorBD.setLastname(author.getLastname());
-            authorBD.setBiography(author.getBiography());
-            authorRepository.save(authorBD);
-            return authorBD.getId();
-        }
-        return 0L;
+    public Long update(Long id, DatosAuthor datosAuthor) {
+        Author authorBD = getById(id);
+        authorBD.setFirstname(datosAuthor.firstname());
+        authorBD.setLastname(datosAuthor.lastname());
+        authorBD.setBiography(datosAuthor.biography());
+        return authorBD.getId();
     }
 
     @Override
     public void delete(Long id) {
-        Optional<Author> authorOpt = getById(id);
-        if (authorOpt.isPresent()){
-            Author authorBD = authorOpt.get();
-            authorBD.setActive(false);
-            authorRepository.save(authorBD);
-        }
+        Author authorDB = getById(id);
+        authorDB.setActive(false);
     }
 
     @Override
