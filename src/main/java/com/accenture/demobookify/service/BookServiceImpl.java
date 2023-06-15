@@ -1,6 +1,10 @@
 package com.accenture.demobookify.service;
 
+import com.accenture.demobookify.dto.DatosBook;
+import com.accenture.demobookify.dto.DatosBookResponse;
+import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.Book;
+import com.accenture.demobookify.repository.AuthorRepository;
 import com.accenture.demobookify.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,19 +16,23 @@ import java.util.Optional;
 public class BookServiceImpl implements BookService{
 
     private BookRepository bookRepository;
+    private AuthorRepository authorRepository;
     @Autowired
-    public BookServiceImpl(BookRepository bookRepository){
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository){
         this.bookRepository=bookRepository;
+        this.authorRepository = authorRepository;
     }
 
     @Override
-    public List<Book> getAll() {
-        return bookRepository.findAll();
+    public List<DatosBookResponse> getAll() {
+        List<Book> books = bookRepository.findAll();
+        return books.stream().map(DatosBookResponse::new).toList();
     }
 
     @Override
-    public Optional<Book> getById(Long id) {
-        return bookRepository.findById(id);
+    public DatosBookResponse getById(Long id) {
+        Book book =  bookRepository.getReferenceById(id);
+        return new DatosBookResponse(book);
     }
 
     @Override
@@ -33,36 +41,29 @@ public class BookServiceImpl implements BookService{
     }
 
     @Override
-    public Long save(Book book) {
-        Book bookRes = bookRepository.save(book);
-        return bookRes.getId();
+    public DatosBookResponse save(DatosBook datosBook) {
+        Author author = authorRepository.getReferenceById(datosBook.authorId());
+        Book book = bookRepository.save(new Book(datosBook, author));
+        return new DatosBookResponse(book);
     }
 
     @Override
-    public Long update(Long id, Book book) {
-        Optional<Book> bookOpt = getById(id);
-        if(bookOpt.isPresent()){
-            Book bookBD = bookOpt.get();
-            bookBD.setTitle(book.getTitle());
-            bookBD.setAuthor_id(book.getAuthor_id());
-            bookBD.setDescription(book.getDescription());
-            bookBD.setDescription(book.getDescription());
-            bookBD.setQuantity_available(book.getQuantity_available());
-            book.setActive(book.isActive());
-            bookRepository.save(bookBD);
-            return bookBD.getId();
-        }
-        return 0L;
+    public DatosBookResponse update(Long id, DatosBook datosBook) {
+        Author author = authorRepository.getReferenceById(datosBook.authorId());
+        Book book = bookRepository.getReferenceById(id);
+        book.setTitle(datosBook.title());
+        book.setAuthor(author);
+        book.setDescription(datosBook.description());
+        book.setPrice(datosBook.price());
+        book.setQuantity_available(datosBook.quantity_available());
+        return new DatosBookResponse(book);
     }
 
     @Override
-    public void delete(Long id) {
-        Optional<Book> bookOpt = getById(id);
-        if (bookOpt.isPresent()){
-            Book bookBD = bookOpt.get();
-            bookBD.setActive(false);
-            bookRepository.save(bookBD);
-        }
+    public DatosBookResponse delete(Long id) {
+        Book bookBD = bookRepository.getReferenceById(id);
+        bookBD.setActive(false);
+        return new DatosBookResponse(bookBD);
     }
 
     @Override

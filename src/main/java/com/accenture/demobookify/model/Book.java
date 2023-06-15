@@ -1,15 +1,25 @@
 package com.accenture.demobookify.model;
 
+import com.accenture.demobookify.dto.DatosBook;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 @Entity
 @Table(name = "book")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Book {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secuencia")
+    @SequenceGenerator(name = "secuencia", sequenceName = "ecuencia", initialValue = 6, allocationSize = 1)
     private Long id;
     private String title;
     @ManyToOne(cascade = CascadeType.ALL)//NO AGARRA EK CASCADE ALL SIGUE SURGIENDO ERROR DE CONSTRAINT
@@ -21,59 +31,14 @@ public class Book {
     //@OneToMany(mappedBy = "book")//Nombre del atributo del objeto
     //private List<Purchase> purchases;
     private boolean isActive;
-    public Long getId() {
-        return id;
+
+    public Book(DatosBook datosBook, Author author){
+        this.title = datosBook.title();
+        this.author = author;
+        this.description = datosBook.description();
+        this.price = datosBook.price();
+        this.quantity_available = datosBook.quantity_available();
+        this.isActive = true;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Author getAuthor_id() {
-        return author;
-    }
-
-    public void setAuthor_id(Author author_id) {
-        this.author = author_id;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public int getQuantity_available() {
-        return quantity_available;
-    }
-
-    public void setQuantity_available(int quantity_available) {
-        this.quantity_available = quantity_available;
-    }
-
-    public boolean isActive() {
-        return isActive;
-    }
-
-    public void setActive(boolean active) {
-        isActive = active;
-    }
 }

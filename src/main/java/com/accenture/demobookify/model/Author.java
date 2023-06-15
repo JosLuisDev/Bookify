@@ -16,18 +16,15 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Author {
     /*
-    Cree una secuencia en BD para que el id autogenerado comience en 100 para evitar que los que agregamos en
+    Cree una secuencia en BD para que el id autogenerado comience en 6 para evitar que los que agregamos en
     el archivo .sql puedan causar error a causa del id
      */
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "secuencia")
     @SequenceGenerator(name = "secuencia", sequenceName = "ecuencia", initialValue = 6, allocationSize = 1)
     private Long id;
-    @NotBlank
     private String firstname;
-    @NotBlank
     private String lastname;
-    @NotBlank
     private String biography;
     private boolean isActive;
 
