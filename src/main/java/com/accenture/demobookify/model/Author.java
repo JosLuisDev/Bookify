@@ -2,7 +2,6 @@ package com.accenture.demobookify.model;
 
 import com.accenture.demobookify.dto.DatosAuthor;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

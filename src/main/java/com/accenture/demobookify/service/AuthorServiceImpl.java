@@ -1,9 +1,9 @@
 package com.accenture.demobookify.service;
 
 import com.accenture.demobookify.dto.DatosAuthor;
+import com.accenture.demobookify.exception.AuthorAlreadyExistException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.repository.AuthorRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +30,11 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public Long save(DatosAuthor datosAuthor) {
+    public Long save(DatosAuthor datosAuthor) throws AuthorAlreadyExistException{
+        boolean exist = validateAuthorName(datosAuthor.firstname(), datosAuthor.lastname());
+        if (exist){
+            throw new AuthorAlreadyExistException("The author already exist");
+        }
         Author author = new Author(datosAuthor);
         Author authorRes = authorRepository.save(author);
         return authorRes.getId();
@@ -54,5 +58,10 @@ public class AuthorServiceImpl implements AuthorService{
     @Override
     public void physicalDelete(Long id) {
         authorRepository.deleteById(id);
+    }
+
+    private boolean validateAuthorName(String firstName, String lastName){
+        Optional<Author> authorOptional = authorRepository.findByFirstnameAndLastnameIgnoreCase(firstName, lastName);
+        return authorOptional.isPresent();
     }
 }

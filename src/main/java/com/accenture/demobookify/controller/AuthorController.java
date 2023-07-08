@@ -1,6 +1,7 @@
 package com.accenture.demobookify.controller;
 
 import com.accenture.demobookify.dto.DatosAuthor;
+import com.accenture.demobookify.exception.AuthorAlreadyExistException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.Book;
 import com.accenture.demobookify.service.AuthorService;
@@ -46,7 +47,12 @@ public class AuthorController {
     @PostMapping("/")
     @Transactional
     ResponseEntity<String> save(@Valid @RequestBody DatosAuthor datosAuthor){
-        Long id = authorService.save(datosAuthor);
+        Long id = -1L;
+        try{
+            id = authorService.save(datosAuthor);
+        }catch(AuthorAlreadyExistException e){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
         return ResponseEntity.status(HttpStatus.OK).body("Se guardo con exito el autor con id: " + id);
     }
 /*

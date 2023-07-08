@@ -7,7 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 public record DatosBook(
-        @NotBlank
+        @NotBlank(message = "El campo title es obligatorio")
         String title,
         @NotNull
         Long authorId,
