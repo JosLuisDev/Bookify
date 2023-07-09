@@ -24,6 +24,7 @@ public class Author {
     private Long id;
     private String firstname;
     private String lastname;
+    private String nationality;
     private String biography;
     private boolean isActive;
 
