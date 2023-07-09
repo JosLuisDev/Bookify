@@ -1,7 +1,7 @@
 package com.accenture.demobookify.controller;
 
 import com.accenture.demobookify.dto.DatosAuthor;
-import com.accenture.demobookify.exception.AuthorAlreadyExistException;
+import com.accenture.demobookify.exception.AuthorDataAlreadyExistException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.Book;
 import com.accenture.demobookify.service.AuthorService;
@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,18 +51,19 @@ public class AuthorController {
     ResponseEntity<String> save(@Valid @RequestBody DatosAuthor datosAuthor, BindingResult bindingResult){
         //Si las validaciones de datosAuthor determinan que hay errores en la peticion
         if (bindingResult.hasErrors()) {
+            //Detereminar el campo que tiene el error y recuperar el error personalizado
             FieldError fieldError = bindingResult.getFieldError();
             assert fieldError != null; //Que no produzca nullPointer
             String fieldName = fieldError.getField();
             String errorMessage = fieldError.getDefaultMessage();
 
-            return ResponseEntity.badRequest().body(errorMessage);
+            return ResponseEntity.badRequest().body("Field: " + fieldName +  "\nError:" + errorMessage);
         }
         //Si no hay errores en la peticion
         Long id = -1L;
         try{
             id = authorService.save(datosAuthor);
-        }catch(AuthorAlreadyExistException e){
+        }catch(AuthorDataAlreadyExistException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.OK).body("Se guardo con exito el autor con id: " + id);

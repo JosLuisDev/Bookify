@@ -15,6 +15,9 @@ public record DatosAuthor(
         @NotBlank
         @Pattern(regexp = "[a-zA-Z]+", message = "The last name attribute must contain only alphabet values.")
         String lastname,
+        @NotBlank
+        @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$", message = "Invalid e-mail")
+        String email,
         @NotNull(message = "The date of birth must not be null")
         @Past(message = "The date of birth must be in the past and must be a valid date")
         @DateTimeFormat(pattern = "yyyy-MM-dd")

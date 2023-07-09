@@ -1,7 +1,7 @@
 package com.accenture.demobookify.service;
 
 import com.accenture.demobookify.dto.DatosAuthor;
-import com.accenture.demobookify.exception.AuthorAlreadyExistException;
+import com.accenture.demobookify.exception.AuthorDataAlreadyExistException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +30,10 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public Long save(DatosAuthor datosAuthor) throws AuthorAlreadyExistException{
-        boolean exist = validateAuthorName(datosAuthor.firstname(), datosAuthor.lastname());
+    public Long save(DatosAuthor datosAuthor) throws AuthorDataAlreadyExistException {
+        boolean exist = validateAuthorData(datosAuthor);
         if (exist){
-            throw new AuthorAlreadyExistException("The author already exist");
+            throw new AuthorDataAlreadyExistException("The name or email of the Author already exist");
         }
         Author author = new Author(datosAuthor);
         Author authorRes = authorRepository.save(author);
@@ -60,8 +60,15 @@ public class AuthorServiceImpl implements AuthorService{
         authorRepository.deleteById(id);
     }
 
-    private boolean validateAuthorName(String firstName, String lastName){
-        Optional<Author> authorOptional = authorRepository.findByFirstnameAndLastnameIgnoreCase(firstName, lastName);
-        return authorOptional.isPresent();
+//    private boolean validateAuthorName(String firstName, String lastName){
+//        Optional<Author> authorOptional = authorRepository.findByFirstnameAndLastnameIgnoreCase(firstName, lastName);
+//        return authorOptional.isPresent();
+//    }
+
+    private boolean validateAuthorData(DatosAuthor datosAuthor){
+        Optional<Author> authorFullName = authorRepository.findByFirstnameAndLastnameIgnoreCase(datosAuthor.firstname(), datosAuthor.lastname());
+        Optional<Author> authorEmail = authorRepository.findByEmailIgnoreCase(datosAuthor.email());
+
+        return (authorFullName.isPresent() || authorEmail.isPresent());
     }
 }

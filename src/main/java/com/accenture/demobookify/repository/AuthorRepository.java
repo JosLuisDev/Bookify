@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     Optional<Author> findByFirstnameAndLastnameIgnoreCase(String firstName, String lastName);
+    Optional<Author> findByEmailIgnoreCase(String email);
 }

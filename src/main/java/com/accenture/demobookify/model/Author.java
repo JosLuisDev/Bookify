@@ -26,6 +26,7 @@ public class Author {
     private Long id;
     private String firstname;
     private String lastname;
+    private String email;
     @Column(name = "date_of_birth")
     private LocalDate dateOfBirth;
     private String nationality;
