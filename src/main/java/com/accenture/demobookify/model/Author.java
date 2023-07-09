@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "author")
 @Getter
@@ -24,6 +26,8 @@ public class Author {
     private Long id;
     private String firstname;
     private String lastname;
+    @Column(name = "date_of_birth")
+    private LocalDate dateOfBirth;
     private String nationality;
     private String biography;
     private boolean isActive;

@@ -70,7 +70,7 @@ public class AuthorController {
     }
 /*
 Al actualizar el author, no se debe poder actualizar id para evitar errores inesperados dado que es autogenerado
-ni tampoco el campo active.
+ni tampoco el campo active se debe de poder actualizar a menos que se elimine logicamente el registro.
  */
     @PutMapping("/{id}")
     @Transactional//No hay necesidad de llamar al Repository los cambios que realiza en el service sobre la instancia se persisten en BD

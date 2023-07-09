@@ -1,8 +1,8 @@
-INSERT INTO author (id, firstname, lastname, nationality, biography, is_active) VALUES (1, 'John', 'Doe', 'Mexico', 'Biografía de John Doe',true);
-INSERT INTO author (id, firstname, lastname, nationality, biography, is_active) VALUES (2, 'Jane', 'Smith', 'Mexico', 'Biografía de Jane Smith',true);
-INSERT INTO author (id, firstname, lastname, nationality, biography, is_active) VALUES (3, 'Michael', 'Johnson', 'Mexico', 'Biografía de Michael Johnson',true);
-INSERT INTO author (id, firstname, lastname, nationality, biography, is_active) VALUES (4, 'Emily', 'Williams', 'Mexico', 'Biografía de Emily Williams',true);
-INSERT INTO author (id, firstname, lastname, nationality, biography, is_active) VALUES (5, 'David', 'Brown', 'Mexico', 'Biografía de David Brown',true);
+INSERT INTO author (id, firstname, lastname, date_of_birth, nationality, biography, is_active) VALUES (1, 'John', 'Doe', '1997-01-31', 'Mexico', 'Biografía de John Doe',true);
+INSERT INTO author (id, firstname, lastname, date_of_birth, nationality, biography, is_active) VALUES (2, 'Jane', 'Smith', '1997-01-31', 'Mexico', 'Biografía de Jane Smith',true);
+INSERT INTO author (id, firstname, lastname, date_of_birth, nationality, biography, is_active) VALUES (3, 'Michael', 'Johnson', '1997-01-31', 'Mexico', 'Biografía de Michael Johnson',true);
+INSERT INTO author (id, firstname, lastname, date_of_birth, nationality, biography, is_active) VALUES (4, 'Emily', 'Williams', '1997-01-31', 'Mexico', 'Biografía de Emily Williams',true);
+INSERT INTO author (id, firstname, lastname, date_of_birth, nationality, biography, is_active) VALUES (5, 'David', 'Brown', '1997-01-31', 'Mexico', 'Biografía de David Brown',true);
 
 INSERT INTO book (id, title, author_id, description, price, quantity_available, is_active) VALUES (1, 'Libro 1', 1, 'Descripción del libro 1', 10.99, 100, true);
 INSERT INTO book (id, title, author_id, description, price, quantity_available, is_active) VALUES (2, 'Libro 2', 2, 'Descripción del libro 2', 15.99, 50, true);
