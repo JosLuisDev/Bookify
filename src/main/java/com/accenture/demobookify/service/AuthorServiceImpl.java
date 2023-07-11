@@ -3,6 +3,7 @@ package com.accenture.demobookify.service;
 import com.accenture.demobookify.dto.DatosAuthor;
 import com.accenture.demobookify.exception.AuthorDataAlreadyExistException;
 import com.accenture.demobookify.model.Author;
+import com.accenture.demobookify.model.FileData;
 import com.accenture.demobookify.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -54,16 +55,17 @@ public class AuthorServiceImpl implements AuthorService{
         Author authorDB = getById(id);
         authorDB.setActive(false);
     }
+    @Override
+    public Author updateImageAuthor(FileData fileData, Long idAuthor){
+        Author authorDb = authorRepository.getReferenceById(idAuthor);
+        authorDb.setFileData(fileData);
+        return authorDb;
+    }
 
     @Override
     public void physicalDelete(Long id) {
         authorRepository.deleteById(id);
     }
-
-//    private boolean validateAuthorName(String firstName, String lastName){
-//        Optional<Author> authorOptional = authorRepository.findByFirstnameAndLastnameIgnoreCase(firstName, lastName);
-//        return authorOptional.isPresent();
-//    }
 
     private boolean validateAuthorData(DatosAuthor datosAuthor){
         Optional<Author> authorFullName = authorRepository.findByFirstnameAndLastnameIgnoreCase(datosAuthor.firstname(), datosAuthor.lastname());
@@ -71,4 +73,6 @@ public class AuthorServiceImpl implements AuthorService{
 
         return (authorFullName.isPresent() || authorEmail.isPresent());
     }
+
+
 }
