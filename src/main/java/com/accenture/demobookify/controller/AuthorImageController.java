@@ -18,6 +18,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
 @Controller
 public class AuthorImageController {
 
@@ -34,11 +38,18 @@ public class AuthorImageController {
     @Transactional //Para que haga commit o rollback a la modificacion de Author
     public ResponseEntity<String> uploadFileToFileSystem(@PathVariable Long id, @RequestParam("image") MultipartFile file){
         try{
+            BufferedImage image = ImageIO.read(file.getInputStream());
+            int width = 800;
+            int height = 600;
+
+            if(image.getWidth() > width || image.getHeight() > height){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The image dimensions must be smaller than 800 x 600");
+            }
             FileData fileDb = storageFileDataService.uploadImageToFileSystem(file);
             Author author = authorService.updateImageAuthor(fileDb,id);
             return ResponseEntity.ok("The image was load correctly.\nAuthor Data: \n" +  author.getId() +
                     "\n" + author.getFirstname() + " " + author.getLastname());
-        }catch (IOImageAuthorException e) {
+        }catch (IOImageAuthorException | IOException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
