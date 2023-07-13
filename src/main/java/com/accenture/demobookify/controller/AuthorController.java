@@ -2,6 +2,7 @@ package com.accenture.demobookify.controller;
 
 import com.accenture.demobookify.dto.DatosAuthor;
 import com.accenture.demobookify.exception.AuthorDataAlreadyExistException;
+import com.accenture.demobookify.exception.UrlNotAccesibleException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.Book;
 import com.accenture.demobookify.service.AuthorService;
@@ -63,7 +64,7 @@ public class AuthorController {
         Long id = -1L;
         try{
             id = authorService.save(datosAuthor);
-        }catch(AuthorDataAlreadyExistException e){
+        }catch(AuthorDataAlreadyExistException | UrlNotAccesibleException e){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
         return ResponseEntity.status(HttpStatus.OK).body("Se guardo con exito el autor con id: " + id);

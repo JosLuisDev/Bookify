@@ -31,6 +31,7 @@ public class Author {
     private LocalDate dateOfBirth;
     private String nationality;
     private String biography;
+    private String url;
     @OneToOne
     @JoinColumn(name = "image_id")
     private FileData fileData;

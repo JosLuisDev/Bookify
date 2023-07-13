@@ -2,12 +2,17 @@ package com.accenture.demobookify.service;
 
 import com.accenture.demobookify.dto.DatosAuthor;
 import com.accenture.demobookify.exception.AuthorDataAlreadyExistException;
+import com.accenture.demobookify.exception.UrlNotAccesibleException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.FileData;
 import com.accenture.demobookify.repository.AuthorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,11 +36,16 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public Long save(DatosAuthor datosAuthor) throws AuthorDataAlreadyExistException {
+    public Long save(DatosAuthor datosAuthor) throws AuthorDataAlreadyExistException, UrlNotAccesibleException{
         boolean exist = validateAuthorData(datosAuthor);
         if (exist){
             throw new AuthorDataAlreadyExistException("The name or email of the Author already exist");
         }
+        //Si en la peticion se manda la url, validamos que se accesible.
+        if(!datosAuthor.url().isEmpty()){
+            checkUrlAccessibility(datosAuthor.url());
+        }
+
         Author author = new Author(datosAuthor);
         Author authorRes = authorRepository.save(author);
         return authorRes.getId();
@@ -72,6 +82,25 @@ public class AuthorServiceImpl implements AuthorService{
         Optional<Author> authorEmail = authorRepository.findByEmailIgnoreCase(datosAuthor.email());
 
         return (authorFullName.isPresent() || authorEmail.isPresent());
+    }
+
+    private void checkUrlAccessibility(String url) throws UrlNotAccesibleException {
+        //Creamos un cliente que enviara la peticion
+        HttpClient client = HttpClient.newHttpClient();
+        //Creamos la peticion
+        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url)).build();
+
+        try{
+            //Se envia la peticion. HttpResponse.BodyHandlers.discarding() -> descarta el body del response sin procesarlo.
+            HttpResponse<Void> response = client.send(request, HttpResponse.BodyHandlers.discarding());
+            int statusCode = response.statusCode();
+            System.out.println("statusCode = " + statusCode);
+            if(statusCode < 200 || statusCode >= 300){ //Cualquier codigo diferente de los 200 nos dira que no es accesible
+                throw new UrlNotAccesibleException("The URL of the author is not accesible " + url);
+            }
+        }catch(Exception e){//Si entra al catch es que la URL no es accesible
+            throw new UrlNotAccesibleException("The URL of the author is not accesible " + url);
+        }
     }
 
 

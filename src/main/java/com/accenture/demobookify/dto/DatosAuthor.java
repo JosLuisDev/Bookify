@@ -24,6 +24,19 @@ public record DatosAuthor(
         LocalDate dateOfBirth,
         @NotBlank(message = "The nationality must be specified")
         String nationality,
+        /*
+        La expresión regular:
+        "^(http[s]?://)?([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?$"
+        Esta otra expresion regular acepta las siguientes:
+        http://example.com
+        https://example.es
+        https://www.example.com
+        http://example.com/path/to/resource
+        https://example.com/?param=value
+        http://example.com/path/to/resource?param=value
+         */
+        @Pattern(regexp = "^(http[s]?://)([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?$", message = "URL format invalid")
+        String url,
         @NotBlank(message = "biography must not be blank ")
         @Pattern(regexp = "^.{0,500}$", message = "The biography must not exceed 500 characters.")
         String biography) {

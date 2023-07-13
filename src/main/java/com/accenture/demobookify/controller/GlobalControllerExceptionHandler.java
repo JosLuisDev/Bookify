@@ -14,7 +14,7 @@ public class GlobalControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("The max size to upload an image was exceeded. Max size = 500 KB");
     }
 
-    @ExceptionHandler(NullPointerException.class)
+    @ExceptionHandler(NullPointerException.class)//El unico metodo que arroja este error ha sido el de subir imagen porque solo soporta png
     public ResponseEntity<String> handleImageFormatNotSupported(NullPointerException ex){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The image format that is supported is PNG.");
     }
