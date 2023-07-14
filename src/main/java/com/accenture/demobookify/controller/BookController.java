@@ -2,10 +2,12 @@ package com.accenture.demobookify.controller;
 
 import com.accenture.demobookify.dto.DatosBook;
 import com.accenture.demobookify.dto.DatosBookResponse;
+import com.accenture.demobookify.exception.ArgumentInvalidException;
 import com.accenture.demobookify.model.Book;
 import com.accenture.demobookify.service.BookService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
@@ -38,18 +40,26 @@ public class BookController {
 //si le mando el campo id en la peticion http no lo toma en cuenta y no da error 🫣
     @PostMapping("/")
     @Transactional
-    public ResponseEntity<DatosBookResponse> save(@Valid @RequestBody DatosBook datosBook, UriComponentsBuilder uriComponentsBuilder){
-
-        DatosBookResponse book = bookService.save(datosBook);
-        URI uri = uriComponentsBuilder.path("/{id}").buildAndExpand(book.id()).toUri();
-
-        return ResponseEntity.created(uri).body(book);
+    public ResponseEntity<String> save(@Valid @RequestBody DatosBook datosBook, UriComponentsBuilder uriComponentsBuilder){
+        try{
+            DatosBookResponse book = bookService.save(datosBook);
+            URI uri = uriComponentsBuilder.path("/{id}").buildAndExpand(book.id()).toUri();
+            return ResponseEntity.created(uri).body(book.toString());
+        }catch (ArgumentInvalidException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @PutMapping("/{id}")
     @Transactional
-    public ResponseEntity<DatosBookResponse> update(@PathVariable Long id, @Valid @RequestBody DatosBook datosBook){
-        return ResponseEntity.ok(bookService.update(id, datosBook));
+    public ResponseEntity<String> update(@PathVariable Long id, @Valid @RequestBody DatosBook datosBook){
+//        return ResponseEntity.ok(bookService.update(id, datosBook));
+        try{
+            DatosBookResponse datosActualizados = bookService.update(id,datosBook);
+            return ResponseEntity.ok(datosActualizados.toString());
+        }catch (ArgumentInvalidException ex){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/{id}")

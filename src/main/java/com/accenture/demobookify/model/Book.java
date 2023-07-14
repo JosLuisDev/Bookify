@@ -37,7 +37,7 @@ public class Book {
         this.author = author;
         this.description = datosBook.description();
         this.price = datosBook.price();
-        this.quantity_available = datosBook.quantity_available();
+        this.quantity_available = (int) datosBook.quantity_available();
         this.isActive = true;
     }
 

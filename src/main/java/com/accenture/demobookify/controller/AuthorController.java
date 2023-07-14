@@ -49,17 +49,7 @@ public class AuthorController {
      */
     @PostMapping("/")
     @Transactional
-    ResponseEntity<String> save(@Valid @RequestBody DatosAuthor datosAuthor, BindingResult bindingResult){
-        //Si las validaciones de datosAuthor determinan que hay errores en la peticion
-        if (bindingResult.hasErrors()) {
-            //Detereminar el campo que tiene el error y recuperar el error personalizado
-            FieldError fieldError = bindingResult.getFieldError();
-            assert fieldError != null; //Que no produzca nullPointer
-            String fieldName = fieldError.getField();
-            String errorMessage = fieldError.getDefaultMessage();
-
-            return ResponseEntity.badRequest().body("Field: " + fieldName +  "\nError:" + errorMessage);
-        }
+    ResponseEntity<String> save(@Valid @RequestBody DatosAuthor datosAuthor){
         //Si no hay errores en la peticion
         Long id = -1L;
         try{
