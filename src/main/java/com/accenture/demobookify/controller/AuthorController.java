@@ -1,6 +1,7 @@
 package com.accenture.demobookify.controller;
 
 import com.accenture.demobookify.dto.DatosAuthor;
+import com.accenture.demobookify.dto.DatosBookResponse;
 import com.accenture.demobookify.exception.AuthorDataAlreadyExistException;
 import com.accenture.demobookify.exception.UrlNotAccesibleException;
 import com.accenture.demobookify.model.Author;
@@ -42,6 +43,11 @@ public class AuthorController {
     public ResponseEntity<List<Author>> findAll() {
         List<Author> authors = authorService.getAll();
         return ResponseEntity.status(HttpStatus.OK).body(authors);
+    }
+
+    @GetMapping("/authors/{id}/books")
+    public ResponseEntity<List<DatosBookResponse>> findBooksByAuthor(@PathVariable Long id){
+        return ResponseEntity.ok(bookService.getBooksByAuthor(id));
     }
     /*
     Al crear un usuario no debemos mandar el ID, puesto que es autogenerado y el campo isActive debe de ser siempre true

@@ -36,6 +36,11 @@ public class BookServiceImpl implements BookService{
         Book book =  bookRepository.getReferenceById(id);
         return new DatosBookResponse(book);
     }
+    @Override
+    public List<DatosBookResponse> getBooksByAuthor(Long id){
+        List<Book> booksDb = bookRepository.findByAuthorId(id);
+        return booksDb.stream().map(DatosBookResponse::new).toList();
+    }
 
     @Override
     public List<Book> getByAuthorId(Long id){

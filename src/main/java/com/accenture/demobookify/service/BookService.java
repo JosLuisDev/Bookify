@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface BookService {
     List<DatosBookResponse> getAll();
     DatosBookResponse getById(Long id);
+    List<DatosBookResponse> getBooksByAuthor(Long id);
     List<Book> getByAuthorId(Long id);
     DatosBookResponse save(DatosBook datosBook) throws ArgumentInvalidException;
     DatosBookResponse update(Long id, DatosBook datosBook) throws ArgumentInvalidException;
