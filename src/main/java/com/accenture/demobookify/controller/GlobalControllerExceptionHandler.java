@@ -16,19 +16,19 @@ import java.util.Map;
 public class GlobalControllerExceptionHandler {
 
     @ExceptionHandler(MaxUploadSizeExceededException.class)
-    public ResponseEntity<String> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex){
+    public ResponseEntity<String> handleMaxUploadSizeExceededException(){
         return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body("The max size to upload an image was exceeded. Max size = 500 KB");
     }
 
     @ExceptionHandler(NullPointerException.class)//El unico metodo que arroja este error ha sido el de subir imagen porque solo soporta png
-    public ResponseEntity<String> handleImageFormatNotSupported(NullPointerException ex){
+    public ResponseEntity<String> handleImageFormatNotSupported(){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("The image format that is supported is PNG.");
     }
 
     //Manejar el error de fecha invalida en dateOfBirth de Author
     @ExceptionHandler(DateTimeParseException.class)
     public ResponseEntity<String> handleNotValidDateException(){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Property dateOfBirth invalid, the date is invalid");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Property dateOfBirth invalid. You need to use this format yyyy-MM-dd and use a valid Date.");
     }
 
     //Mejor manera de manejar las excepciones para que salgan todos los errores en la peticion, igualmente puede no regresar

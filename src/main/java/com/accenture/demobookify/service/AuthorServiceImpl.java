@@ -56,7 +56,12 @@ public class AuthorServiceImpl implements AuthorService{
         Author authorBD = getById(id);
         authorBD.setFirstname(datosAuthor.firstname());
         authorBD.setLastname(datosAuthor.lastname());
+        authorBD.setEmail(datosAuthor.email());
+        authorBD.setDateOfBirth(datosAuthor.dateOfBirth());
+        authorBD.setNationality(datosAuthor.nationality());
         authorBD.setBiography(datosAuthor.biography());
+        authorBD.setUrl(datosAuthor.url());
+        authorBD.setFileData(datosAuthor.fileData());
         return authorBD.getId();
     }
 

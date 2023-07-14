@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 @Entity
@@ -28,8 +29,9 @@ public class Book {
     private String description;
     private BigDecimal price;
     private int quantity_available;
-    //@OneToMany(mappedBy = "book")//Nombre del atributo del objeto
-    //private List<Purchase> purchases;
+    @Column(name = "publication_year")
+    private String publicationYear;
+    private String language;
     private boolean isActive;
 
     public Book(DatosBook datosBook, Author author){
@@ -38,6 +40,8 @@ public class Book {
         this.description = datosBook.description();
         this.price = datosBook.price();
         this.quantity_available = (int) datosBook.quantity_available();
+        this.publicationYear = datosBook.publicationYear();
+        this.language = datosBook.language();
         this.isActive = true;
     }
 

@@ -64,6 +64,8 @@ public class BookServiceImpl implements BookService{
         book.setDescription(datosBook.description());
         book.setPrice(datosBook.price());
         book.setQuantity_available((int) datosBook.quantity_available());
+        book.setPublicationYear(datosBook.publicationYear());
+        book.setLanguage(datosBook.language());
         return new DatosBookResponse(book);
     }
 

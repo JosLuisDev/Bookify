@@ -40,7 +40,12 @@ public class Author {
     public Author(DatosAuthor datosAuthor) {
         this.firstname = datosAuthor.firstname();
         this.lastname = datosAuthor.lastname();
+        this.email = datosAuthor.email();
+        this.dateOfBirth = datosAuthor.dateOfBirth();
+        this.nationality = datosAuthor.nationality();
         this.biography = datosAuthor.biography();
+        this.url = datosAuthor.url();
+        this.fileData = datosAuthor.fileData();
         this.isActive = true;
     }
 }
