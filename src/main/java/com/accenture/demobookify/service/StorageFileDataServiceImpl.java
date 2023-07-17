@@ -1,5 +1,6 @@
 package com.accenture.demobookify.service;
 
+import com.accenture.demobookify.exception.DataNotFoundException;
 import com.accenture.demobookify.exception.IOImageAuthorException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.FileData;
@@ -43,7 +44,7 @@ public class StorageFileDataServiceImpl implements StorageFileDataService{
     }
 
     @Override
-    public byte[] downloadImageFromFileSystem(Long id) throws IOImageAuthorException {
+    public byte[] downloadImageFromFileSystem(Long id) throws IOImageAuthorException, DataNotFoundException {
 
         try{
             Author authordb = authorService.getById(id);

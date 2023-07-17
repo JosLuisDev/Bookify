@@ -2,6 +2,7 @@ package com.accenture.demobookify.service;
 
 import com.accenture.demobookify.dto.DatosAuthor;
 import com.accenture.demobookify.exception.AuthorDataAlreadyExistException;
+import com.accenture.demobookify.exception.DataNotFoundException;
 import com.accenture.demobookify.exception.UrlNotAccesibleException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.FileData;
@@ -31,8 +32,11 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public Author getById(Long id) {
-        return authorRepository.getReferenceById(id);
+    public Author getById(Long id) throws DataNotFoundException {
+//        return authorRepository.getReferenceById(id);
+        Optional<Author> author = authorRepository.findById(id);
+        if(author.isEmpty()) throw new DataNotFoundException("The author with id " + id + " not exist");
+        return author.get();
     }
 
     @Override
@@ -52,7 +56,7 @@ public class AuthorServiceImpl implements AuthorService{
     }
 
     @Override
-    public Long update(Long id, DatosAuthor datosAuthor) {
+    public Long update(Long id, DatosAuthor datosAuthor) throws DataNotFoundException{
         Author authorBD = getById(id);
         authorBD.setFirstname(datosAuthor.firstname());
         authorBD.setLastname(datosAuthor.lastname());
@@ -62,13 +66,15 @@ public class AuthorServiceImpl implements AuthorService{
         authorBD.setBiography(datosAuthor.biography());
         authorBD.setUrl(datosAuthor.url());
         authorBD.setFileData(datosAuthor.fileData());
+        authorRepository.save(authorBD);
         return authorBD.getId();
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Long id) throws DataNotFoundException{
         Author authorDB = getById(id);
         authorDB.setActive(false);
+        authorRepository.save(authorDB);
     }
     @Override
     public Author updateImageAuthor(FileData fileData, Long idAuthor){

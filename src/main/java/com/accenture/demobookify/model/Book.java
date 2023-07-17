@@ -1,6 +1,7 @@
 package com.accenture.demobookify.model;
 
 import com.accenture.demobookify.dto.DatosBook;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "book")
+@Table(name = "books")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -33,6 +34,10 @@ public class Book {
     private String publicationYear;
     private String language;
     private boolean isActive;
+    //Como cree la relacion de muchos a muchos en Order aqui tambien debo agregarla para mapearla
+    @JsonIgnore
+    @ManyToMany(mappedBy = "books")//mappedBy especifica el nombre del atributo en la entidad Order
+    private List<Order> orders;
 
     public Book(DatosBook datosBook, Author author){
         this.title = datosBook.title();

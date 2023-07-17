@@ -10,7 +10,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "author")
+@Table(name = "authors")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -32,7 +32,7 @@ public class Author {
     private String nationality;
     private String biography;
     private String url;
-    @OneToOne
+    @OneToOne()
     @JoinColumn(name = "image_id")
     private FileData fileData;
     private boolean isActive;

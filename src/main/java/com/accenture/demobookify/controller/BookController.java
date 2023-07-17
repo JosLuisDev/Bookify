@@ -3,8 +3,10 @@ package com.accenture.demobookify.controller;
 import com.accenture.demobookify.dto.DatosBook;
 import com.accenture.demobookify.dto.DatosBookResponse;
 import com.accenture.demobookify.exception.ArgumentInvalidException;
-import com.accenture.demobookify.model.Book;
+import com.accenture.demobookify.exception.DataNotFoundException;
+import com.accenture.demobookify.model.Order;
 import com.accenture.demobookify.service.BookService;
+import com.accenture.demobookify.service.OrderService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,14 +20,16 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/book")
+@RequestMapping("/books")
 @Validated
 public class BookController {
 
     private final BookService bookService;
+    private final OrderService orderService;
     @Autowired
-    public BookController(BookService bookService){
+    public BookController(BookService bookService, OrderService orderService){
         this.bookService = bookService;
+        this.orderService = orderService;
     }
  //Generamos en DTO DatosBookResponse porque no se pueden serializar las entidades que utilizan Hibernate, arrojan un error: HttpMessageConversionException
     @GetMapping("/")
@@ -36,6 +40,15 @@ public class BookController {
     @GetMapping("/{id}")
     public ResponseEntity<DatosBookResponse> findById(@PathVariable Long id){
         return ResponseEntity.ok(bookService.getById(id));
+    }
+    @GetMapping("/{id}/orders")
+    public ResponseEntity<?> findOrdersByBookId(@PathVariable Long id){
+        try{
+            List<Order> orders = orderService.getOrdersByBook(id);
+            return ResponseEntity.ok(orders);
+        }catch (DataNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 //si le mando el campo id en la peticion http no lo toma en cuenta y no da error 🫣
     @PostMapping("/")

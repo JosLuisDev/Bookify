@@ -1,6 +1,7 @@
 package com.accenture.demobookify.controller;
 
 import com.accenture.demobookify.dto.DatosAuthor;
+import com.accenture.demobookify.exception.DataNotFoundException;
 import com.accenture.demobookify.exception.IOImageAuthorException;
 import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.FileData;
@@ -55,7 +56,7 @@ public class AuthorImageController {
     }
 
     @GetMapping("/authorImage/{id}")
-    public ResponseEntity<?> getAuthorImage(@PathVariable Long id){
+    public ResponseEntity<?> getAuthorImage(@PathVariable Long id) throws DataNotFoundException {
 
         try{
             byte[] imageData = storageFileDataService.downloadImageFromFileSystem(id);
