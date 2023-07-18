@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -81,9 +83,12 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public Order update(Long id, DatosOrder datosOrder) throws  DataNotFoundException{
+    public Order update(Long id, DatosOrder datosOrder) throws  DataNotFoundException, RuntimeException{
         Optional<Order> orderOpt = orderRepository.findById(id);
         if(orderOpt.isEmpty()) throw new DataNotFoundException("The order with the id " + id + " not exist");
+
+        validateUser(datosOrder.user_id());
+        validateBooks(datosOrder.books_id());
 
         Order orderDb = orderOpt.get();
         //Validar que los datos de author que vienen en la peticion no sean los mismos que ya existen en BD
@@ -96,7 +101,8 @@ public class OrderServiceImpl implements OrderService{
         if(!bookdIsDb.equals(datosOrder.books_id())){
             List<Book> books = validateBooks(datosOrder.books_id());
             BigDecimal sum = books.stream().map(Book::getPrice).reduce(BigDecimal.ZERO, BigDecimal::add);
-            orderDb.setBooks(books);
+//            orderDb.setBooks(books); Me arrojaba un unsupportedOperation dado que la lista de libros es inmutable
+            orderDb.setBooks(new ArrayList<>(books));
             orderDb.setTotalPrice(sum);
         }
         //Si cambian el estado a SHIPPED la shippingDate se inicializara con la fecha actual
@@ -123,7 +129,7 @@ public class OrderServiceImpl implements OrderService{
     private User validateUser(Long id) throws DataNotFoundException{
         //Recuperar datos del usuario
         Optional<User> userOpt = userRepository.findById(id);
-        if (userOpt.isEmpty()) throw new DataNotFoundException("The author with id " + id + " not exist");
+        if (userOpt.isEmpty()) throw new DataNotFoundException("The user with id " + id + " not exist");
         return userOpt.get();
     }
 

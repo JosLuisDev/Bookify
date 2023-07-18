@@ -88,7 +88,6 @@ public class BookController {
     @Transactional
     public ResponseEntity<?> delete(@PathVariable Long id){
         try{
-            bookService.getById(id);
             bookService.physicalDelete(id);
         }catch (DataNotFoundException e){
             return ResponseEntity.badRequest().body(e.getMessage());

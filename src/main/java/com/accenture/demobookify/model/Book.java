@@ -24,7 +24,7 @@ public class Book {
     @SequenceGenerator(name = "secuencia", sequenceName = "ecuencia", initialValue = 6, allocationSize = 1)
     private Long id;
     private String title;
-    @ManyToOne(cascade = CascadeType.ALL)//NO AGARRA EK CASCADE ALL SIGUE SURGIENDO ERROR DE CONSTRAINT
+    @ManyToOne
     @JoinColumn(name = "author_id")//La tabla book tendra la primary key de la tabla author
     private Author author;
     private String description;

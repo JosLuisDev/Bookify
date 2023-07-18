@@ -95,9 +95,12 @@ public class BookServiceImpl implements BookService{
     public void physicalDelete(Long id) throws DataNotFoundException{
         this.getById(id);//Validar que exista el book en BD
         List<Order> ordersWithThisBook = orderRepository.findByBooksId(id); //Obtener las ordenes asociadas con el libro
-        ordersWithThisBook.forEach(order -> {//Eliminar cada order asociada al libro para que nos deje eliminar el libro
-            orderRepository.deleteById(order.getId());
-        });
+        //Validar que existan ordenes
+        if(!ordersWithThisBook.isEmpty()){
+            ordersWithThisBook.forEach(order -> {//Eliminar cada order asociada al libro para que nos deje eliminar el libro
+                orderRepository.deleteById(order.getId());
+            });
+        }
         bookRepository.deleteById(id);//Eliminar el libro
     }
 
