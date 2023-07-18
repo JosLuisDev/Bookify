@@ -9,7 +9,6 @@ import com.accenture.demobookify.model.Author;
 import com.accenture.demobookify.model.Book;
 import com.accenture.demobookify.service.AuthorService;
 import com.accenture.demobookify.service.BookService;
-import com.accenture.demobookify.service.PurchaseService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,12 +24,10 @@ public class AuthorController {
 
     private AuthorService authorService;
     private BookService bookService;
-    private PurchaseService purchaseService;
     @Autowired
-    public AuthorController(AuthorService authorService, BookService bookService, PurchaseService purchaseService){
+    public AuthorController(AuthorService authorService, BookService bookService){
         this.authorService=authorService;
         this.bookService=bookService;
-        this.purchaseService=purchaseService;
     }
 
     @GetMapping("/{id}")
@@ -99,15 +96,24 @@ ni tampoco el campo active se debe de poder actualizar a menos que se elimine lo
     @DeleteMapping("/{id}")
     @Transactional//Solucionar error: No EntityManager with actual transaction available for current thread - cannot reliably process 'remove' call] with root cause
     ResponseEntity<String> physicalDelete(@PathVariable Long id){
-        //Como libro tiene relacion con purchas debemos borrar primero las compras
-        List<Book> books = bookService.getByAuthorId(id);
-        books.forEach(book -> {
-            purchaseService.deleteByIdBookId(book.getId());
-        });
-        //Como tiene una relacion el author con los libros borramos primero los libros asociados con el author
-        bookService.deleteByIdAuthorId(id);
-        //Ahora si borramos al author
-        authorService.physicalDelete(id);
-        return ResponseEntity.ok("Physical delete success");
+        try{
+            //Como libro tiene relacion con purchas debemos borrar primero las compras
+            List<Book> books = bookService.getByAuthorId(id);
+            books.forEach(book -> {
+                try {
+                    bookService.physicalDelete(book.getId());
+                } catch (DataNotFoundException e) {
+                    throw new RuntimeException("Book does not exist in database: " + book.toString());
+                }
+            });
+            //Como tiene una relacion el author con los libros borramos primero los libros asociados con el author
+            bookService.deleteByIdAuthorId(id);
+            //Ahora si borramos al author
+            authorService.physicalDelete(id);
+            return ResponseEntity.ok("Physical delete success");
+        }catch (RuntimeException e){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+
     }
 }
